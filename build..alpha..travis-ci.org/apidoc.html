@@ -1,0 +1,570 @@
+<div class="apidocDiv">
+<style>
+/*csslint
+*/
+.apidocDiv {
+    background: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.apidocDiv a[href] {
+    color: #33f;
+    font-weight: bold;
+    text-decoration: none;
+}
+.apidocDiv a[href]:hover {
+    text-decoration: underline;
+}
+.apidocCodeCommentSpan {
+    background: #bbf;
+    color: #000;
+    display: block;
+}
+.apidocCodeKeywordSpan {
+    color: #d00;
+    font-weight: bold;
+}
+.apidocCodePre {
+    background: #eef;
+    border: 1px solid;
+    color: #777;
+    padding: 5px;
+    white-space: pre-wrap;
+}
+.apidocFooterDiv {
+    margin-top: 20px;
+    text-align: center;
+}
+.apidocModuleLi {
+    margin-top: 10px;
+}
+.apidocSectionDiv {
+    border-top: 1px solid;
+    margin-top: 20px;
+}
+.apidocSignatureSpan {
+    color: #777;
+    font-weight: bold;
+}
+</style>
+<h1>api documentation for
+    <a
+
+        href="https://github.com/SC5/sc5-styleguide#readme"
+
+    >sc5-styleguide (v1.5.0)</a>
+</h1>
+<h4>Styleguide generator is a handy little tool that helps you generate good looking styleguides from stylesheets using KSS notation.</h4>
+<div class="apidocSectionDiv"><a
+    href="#apidoc.tableOfContents"
+    id="apidoc.tableOfContents"
+><h1>table of contents</h1></a><ol>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.sc5-styleguide">module sc5-styleguide</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.sc5-styleguide.addSection">
+            function <span class="apidocSignatureSpan">sc5-styleguide.</span>addSection
+            <span class="apidocSignatureSpan">(options)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.sc5-styleguide.applyStyles">
+            function <span class="apidocSignatureSpan">sc5-styleguide.</span>applyStyles
+            <span class="apidocSignatureSpan">()</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.sc5-styleguide.generate">
+            function <span class="apidocSignatureSpan">sc5-styleguide.</span>generate
+            <span class="apidocSignatureSpan">(options)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.sc5-styleguide.server">
+            function <span class="apidocSignatureSpan">sc5-styleguide.</span>server
+            <span class="apidocSignatureSpan">(options)</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+</ol></div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.sc5-styleguide" id="apidoc.module.sc5-styleguide">module sc5-styleguide</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.sc5-styleguide.addSection" id="apidoc.element.sc5-styleguide.addSection">
+        function <span class="apidocSignatureSpan">sc5-styleguide.</span>addSection
+        <span class="apidocSignatureSpan">(options)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">addSection = function (options) {
+  var throughOpts = {
+      objectMode: true,
+      allowHalfOpen: false
+    };
+
+  // Parameters
+  var args = minimist(process.argv.slice(2)),
+    params = {
+      name: args.name || args.n,
+      order: args.order || args.o
+    };
+
+  var parsers = options &#x26;&#x26; options.parsers || &#x27;undefined&#x27;;
+
+  // Validate params
+
+  if (!params.name) {
+    gutil.beep();
+    gutil.log(gutil.colors.red(&#x27;Define name with --name=my-name&#x27;));
+    return;
+  }
+
+  if (!params.order) {
+    gutil.beep();
+    gutil.log(gutil.colors.red(&#x27;Define name with --order=1.2.3&#x27;));
+    return;
+  }
+
+  params.order = params.order.toString();
+
+  var sectionRegExp = /(Styleguide )([0-9]+(\.[0-9]+)*)/;
+
+  var allFiles = [];
+
+  var nearestSibling = null;
+
+  function isLess(left, right) {
+    left = left.split(&#x27;.&#x27;);
+    right = right.split(&#x27;.&#x27;);
+
+    var l = false;
+
+    for (var i = 0; i &#x3c; Math.max(left.length, right.length); i++) {
+      if (parseInt(left[i]) &#x3c; parseInt(right[i])) {
+        l = true;
+        break;
+      }
+      if (parseInt(left[i]) &#x3e; parseInt(right[i])) {
+        l = false;
+        break;
+      }
+    }
+
+    return l;
+  }
+
+  function getFinalZeros(number) {
+     var match = number.match(/^(\d+(?:\.\d+)*?)((?:\.0)*)$/);
+     return {
+       full: number,
+       pure: match[1],
+       zeros: match[2]
+     };
+  }
+
+<span class="apidocCodeCommentSpan">  /*function isEqual(left, right) {
+    var findZeros = /^(\d+(?:\.\d+)*?)((?:\.0)*)$/;
+    // Remove ending zeros
+    left = left.match(findZeros);
+    if (left !== null) {
+      left = left[1];
+    } else {
+      return false;
+    }
+    right = right.match(findZeros);
+    if (right !== null) {
+      right = right[1];
+    } else {
+      return false;
+    }
+
+    return (left === right);
+  }*/
+</span>
+  function ifBelongsToParent(parentSection, section) {
+    var belongs = true;
+    parentSection = parentSection &#x26;&#x26; parentSection.split(&#x27;.&#x27;);
+    section = section.split(&#x27;.&#x27;);
+
+    parentSection &#x26;&#x26; parentSection.forEach(function(val, n) {
+      if (val !== section[n]) {
+        belongs = false;
+      }
+    });
+    return belongs;
+  }
+
+  function increaseSection(section, newSection, diff) {
+    // remove final zeros
+    var normalizedSection = getFinalZeros(section);
+    var normalizedSectionArray = normalizedSection.pure.split(&#x27;.&#x27;);
+
+    var normalizedNewSection = getFinalZeros(newSection);
+    var normalizedNewSectionArray = normalizedNewSection.pure.split(&#x27;.&#x27;);
+
+    // Shold increase the same register as there are in new section
+    var registerIndex = normalizedNewSectionArray.length - 1;
+    if (normalizedSectionArray[registerIndex]) {
+      normalizedSectionArray[registerIndex] = parseInt(normalizedSectionArray[registerIndex]) + diff;
+    }
+
+    return normalizedSectionArray.join(&#x27;.&#x27;) + normalizedSection.zeros;
+  }
+
+  function changeNumber(blocks, order, fileIndex) {
+    return blocks.map(function(block){
+      if (!block.kss) {
+        return block;
+      }
+      var match = block.kss.match(sectionRegExp);
+      var currentNumber = match[2];
+
+      if (isLess(currentNumber, order)) {
+        return block;
+      }
+
+      var parentSection = order.split(&#x27;.&#x27;);
+      parentSection.pop();
+      parentSection = parentSection.join(&#x27;.&#x27;);
+
+      if (!ifBelongsToParent(parentSection, currentNumber)) {
+        return block;
+      }
+
+      /*if (isEqual(parentSection, currentNumber)) {
+        console.log(&#x27;isEqual&#x27;, parentSection, currentNumber);
+        return block;
+      }*/
+
+      var newVal = increaseSection(currentNumber, order, 1);
+
+      block.kss = block.kss.replace(sectionRegExp, &#x27;$1&#x27; + newVal);
+      allFiles[fileIndex].modified = true;
+
+      return block;
+    });
+  }
+
+  function bufferFileContents(file, enc, done) {
+
+    this.push(file);
+
+    var contents = file.contents.toString(),
+      syntax = path.extname(file.path).substring(1),
+      parser = parsers  ? parsers[syntax] : &#x27;undefined&#x27;,
+      blocks = kssSplitter.getBlocks(contents, syntax, parser);
+
+    // check if a block is nearest sibling;
+    blocks.forEach(function(block, index) {
+      if (!block.kss) {
+        return;
+      }
+      var match = block.kss.match(sect ...</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+### Adding new section in between
+
+You may use `addSection` helper in order to make it easier adding a new section (or subsection) in between of the existing. It shifts
+ reference numbers of the following sections. To create a helping task, write this:
+
+```js
+gulp.task(&#x22;styleguide:addsection&#x22;, function() {
+  return gulp.src(&#x27;path/to/components/**/*.less&#x27;)
+    .pipe(styleguide.<span class="apidocCodeKeywordSpan">addSection</span>())
+    .pipe(gulp.dest(&#x27;path/to/components/&#x27;))
+});
+```
+
+Use this task with the parameters:
+
+```
+...</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.sc5-styleguide.applyStyles" id="apidoc.element.sc5-styleguide.applyStyles">
+        function <span class="apidocSignatureSpan">sc5-styleguide.</span>applyStyles
+        <span class="apidocSignatureSpan">()</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">applyStyles = function () {
+  var throughOpts = {
+    objectMode: true,
+    allowHalfOpen: false
+  }, stylesBuffer = &#x27;&#x27;,
+    pseudoStylesBuffer = &#x27;&#x27;,
+    atRulesBuffer = &#x27;&#x27;;
+
+  function bufferFileContents(file, enc, done) {
+    var pseudoStylesPromise,
+      atRulesPromise;
+
+    // Make sure file goes through the next gulp plugin
+    // jshint -W040
+    this.push(file);
+    // jshint +W040
+
+    // Process only CSS files
+    // For example gulp-ruby-sass generatsd sourcemaps to the stream that we do not want to include
+    if (path.extname(file.path) !== &#x27;.css&#x27;) {
+      done();
+      return;
+    }
+
+    // Add styles to common stylesheet
+    stylesBuffer += file.contents.toString();
+
+    // Create stylesheet that contains pseudo styles
+    pseudoStylesPromise = Q.Promise(function(resolve) {
+      pseudoStylesBuffer += pseudoSelectors.stylesFromString(file.contents.toString(), {
+        source: file.path
+      });
+      resolve();
+    });
+
+    // Create stylesheet that contains at-rules
+    atRulesPromise = Q.Promise(function(resolve) {
+      atRulesBuffer += atRules.stylesFromString(file.contents.toString(), {
+        source: file.path
+      });
+      resolve();
+    });
+
+    Q.all([pseudoStylesPromise, atRulesPromise]).then(function() {
+      done();
+    });
+  }
+
+  return through(throughOpts, bufferFileContents, function(cb) {
+    this.push(new File({
+      path: &#x27;styleguide.css&#x27;,
+      contents: new Buffer(stylesBuffer)
+    }));
+
+    this.push(new File({
+      path: &#x27;styleguide_pseudo_styles.css&#x27;,
+      contents: new Buffer(pseudoStylesBuffer)
+    }));
+
+    this.push(new File({
+      path: &#x27;styleguide_at_rules.css&#x27;,
+      contents: new Buffer(atRulesBuffer)
+    }));
+
+    cb();
+  }).on(&#x27;end&#x27;, function() {
+    if (socketIsOpen()) {
+      serverInstance[sgOptions.port].io.emitStylesChanged();
+    }
+  });
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+});
+
+gulp.task(&#x27;styleguide:applystyles&#x27;, function() {
+return gulp.src(&#x27;main.scss&#x27;)
+  .pipe(sass({
+    errLogToConsole: true
+  }))
+  .pipe(styleguide.<span class="apidocCodeKeywordSpan">applyStyles</span>())
+  .pipe(gulp.dest(outputPath));
+});
+
+gulp.task(&#x27;watch&#x27;, [&#x27;styleguide&#x27;], function() {
+// Start watching changes and update styleguide whenever changes are detected
+// Styleguide automatically detects existing server instance
+gulp.watch([&#x27;*.scss&#x27;], [&#x27;styleguide&#x27;]);
+...</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.sc5-styleguide.generate" id="apidoc.element.sc5-styleguide.generate">
+        function <span class="apidocSignatureSpan">sc5-styleguide.</span>generate
+        <span class="apidocSignatureSpan">(options)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">generate = function (options) {
+  var opt = common.sanitizeOptions(options),
+    filesBuffer = {},
+    throughOpts = {
+      objectMode: true,
+      allowHalfOpen: false
+    },
+    styleguideProcessors = _.extend(
+        {
+          10: replaceSectionReferences,
+          20: generateSectionWrapperMarkup
+        },
+        opt.styleguideProcessors
+    );
+  sgOptions = opt; // Copy options into global
+
+  function bufferFileContents(file, enc, done) {
+    if (file.isNull()) {
+      return;
+    }
+    if (file.isStream()) {
+      return console.error(&#x27;Styleguide does not support streams!&#x27;);
+    }
+
+    // Exclude empty files
+    if (file.contents.toString(&#x27;utf8&#x27;) !== &#x27;&#x27;) {
+      filesBuffer[file.path] = file.contents.toString(&#x27;utf8&#x27;);
+      var hash = crypto.createHash(&#x27;md5&#x27;).update(file.path).digest(&#x27;hex&#x27;);
+      fileHashes[file.path] = hash;
+      fileHashes[hash] = file.path;
+    }
+
+    // Make sure file goes through the next gulp plugin
+    // jshint -W040
+    this.push(file);
+    // jshint +W040
+    done();
+  }
+
+  emitProgressStart();
+
+  // A stream through which each file will pass
+  return through(throughOpts, bufferFileContents, function(callback) {
+      var _this = this,
+        // Styleguide object to be built
+        styleguide = {},
+        // Parse KSS sections
+        parseKSSPromise = kssParser.parseKssSections(filesBuffer, opt.kssOpt, opt.parsers),
+        // Filter variable files
+        // File paths are full absolute paths so we need to add wildcard prefix
+        // Also empty wildcard should return all files
+        variableFiles = opt.styleVariables ? filterFiles(filesBuffer, &#x27;**/&#x27; + opt.styleVariables) : filesBuffer,
+        // Parse variable decarations from files
+        parseVariablesPromise = variableParser.parseVariableDeclarationsFromFiles(variableFiles, opt);
+
+      Q.all([parseKSSPromise, parseVariablesPromise]).spread(function(sections, variables) {
+        styleguide.sections = sections;
+        styleguide.variables = variables;
+
+        // Extend config with Angular directives declared in KSS
+        opt.filesConfig = angularFiles.add(opt.filesConfig, sections);
+
+        function pushAllFiles() {
+          return through.obj(function(file, enc, cb) {
+            _this.push(file);
+            cb();
+          });
+        }
+
+        function processOverviewMarkdown(opt) {
+          return Q.Promise(function(resolve) {
+            if (!opt.overviewPath) {
+              resolve();
+            }
+            markdown.getStream(opt.overviewPath)
+              .pipe(rename(function(path) {
+                path.basename = &#x27;overview&#x27;;
+                path.extname = &#x27;.html&#x27;;
+              }))
+              .pipe(pushAllFiles())
+              .on(&#x27;finish&#x27;, resolve);
+          });
+        }
+
+        options.enablePug &#x26;&#x26; generatePugMarkup(styleguide, options);
+
+        _.each(styleguideProcessors, function(processor) {
+          processor(styleguide);
+        });
+
+        copyUsedOptionsToJsonConfig(opt, styleguide);
+        appendUsedVariablesToEachBlock(opt, styleguide);
+        addFileHashesAndReplaceAbsolutePaths(styleguide);
+
+        // Create JSON containing KSS data
+        _this.push(new File({
+          path: &#x27;styleguide.json&#x27;,
+          contents: new Buffer(JSON.stringify(styleguide))
+        }));
+
+        var stylesCompiled,
+          overviewProcessed,
+          filesCopied,
+          favIcon,
+          indexHtmlProcessed;
+
+        overviewProcessed = processOverviewMarkdown(opt);
+        var cssSrc = [distPath + &#x27;/css/styleguide-app.css&#x27;, distPath + &#x27;/css/styleguide_helper_elements.css&#x27;];
+
+        // Copy all files (except index.html) from dist from to output stream
+        filesCopied = Q.Promise(function(resolve) {
+          //gulp.src([distPath + &#x27;/**&#x27;, &#x27;!&#x27; + distPath + &#x27;/index.html&#x27;, + &#x27;!&#x27; + distPath + &#x27;**/*.css&#x27;])
+          var copySrc = [distPath + &#x27;/**&#x27;, &#x27;!&#x27; + distPath + &#x27;/index.html&#x27;];
+
+          copySrc = copySrc.concat(cssSrc.map(function(item){
+            return &#x27;!&#x27; + item;
+          }));
+
+          gulp.src(copySrc)
+            .pipe(pushAllFiles())
+            .on(&#x27;finish&#x27;, resolve); ...</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+var gulp = require(&#x27;gulp&#x27;);
+var styleguide = require(&#x27;sc5-styleguide&#x27;);
+var sass = require(&#x27;gulp-sass&#x27;);
+var outputPath = &#x27;output&#x27;;
+
+gulp.task(&#x27;styleguide:generate&#x27;, function() {
+  return gulp.src(&#x27;*.scss&#x27;)
+    .pipe(styleguide.<span class="apidocCodeKeywordSpan">generate</span>({
+        title: &#x27;My Styleguide&#x27;,
+        server: true,
+        rootPath: outputPath,
+        overviewPath: &#x27;README.md&#x27;
+      }))
+    .pipe(gulp.dest(outputPath));
+});
+...</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.sc5-styleguide.server" id="apidoc.element.sc5-styleguide.server">
+        function <span class="apidocSignatureSpan">sc5-styleguide.</span>server
+        <span class="apidocSignatureSpan">(options)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">server = function (options) {
+  return startServer(options);
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocFooterDiv">
+    [ this document was created with
+    <a href="https://github.com/kaizhu256/node-utility2" target="_blank">utility2</a>
+    ]
+</div>
+</div>
