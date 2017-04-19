@@ -1,4 +1,4 @@
-<div class="apidocDiv">
+<html><head></head><body><div class="apidocDiv">
 <style>
 /*csslint
 */
@@ -47,17 +47,10 @@
 }
 </style>
 <h1>api documentation for
-    <a
-
-        href="https://github.com/SC5/sc5-styleguide#readme"
-
-    >sc5-styleguide (v1.6.0)</a>
+    <a href="https://github.com/SC5/sc5-styleguide#readme">sc5-styleguide (v1.6.0)</a>
 </h1>
 <h4>Styleguide generator is a handy little tool that helps you generate good looking styleguides from stylesheets using KSS notation.</h4>
-<div class="apidocSectionDiv"><a
-    href="#apidoc.tableOfContents"
-    id="apidoc.tableOfContents"
-><h1>table of contents</h1></a><ol>
+<div class="apidocSectionDiv"><a href="#apidoc.tableOfContents" id="apidoc.tableOfContents"><h1>table of contents</h1></a><ol>
 
     <li class="apidocModuleLi"><a href="#apidoc.module.sc5-styleguide">module sc5-styleguide</a><ol>
 
@@ -518,19 +511,19 @@
       order: args.order || args.o
     };
 
-  var parsers = options &#x26;&#x26; options.parsers || &#x27;undefined&#x27;;
+  var parsers = options &amp;&amp; options.parsers || 'undefined';
 
   // Validate params
 
   if (!params.name) {
     gutil.beep();
-    gutil.log(gutil.colors.red(&#x27;Define name with --name=my-name&#x27;));
+    gutil.log(gutil.colors.red('Define name with --name=my-name'));
     return;
   }
 
   if (!params.order) {
     gutil.beep();
-    gutil.log(gutil.colors.red(&#x27;Define name with --order=1.2.3&#x27;));
+    gutil.log(gutil.colors.red('Define name with --order=1.2.3'));
     return;
   }
 
@@ -543,17 +536,17 @@
   var nearestSibling = null;
 
   function isLess(left, right) {
-    left = left.split(&#x27;.&#x27;);
-    right = right.split(&#x27;.&#x27;);
+    left = left.split('.');
+    right = right.split('.');
 
     var l = false;
 
-    for (var i = 0; i &#x3c; Math.max(left.length, right.length); i++) {
-      if (parseInt(left[i]) &#x3c; parseInt(right[i])) {
+    for (var i = 0; i &lt; Math.max(left.length, right.length); i++) {
+      if (parseInt(left[i]) &lt; parseInt(right[i])) {
         l = true;
         break;
       }
-      if (parseInt(left[i]) &#x3e; parseInt(right[i])) {
+      if (parseInt(left[i]) &gt; parseInt(right[i])) {
         l = false;
         break;
       }
@@ -592,10 +585,10 @@
 </span>
   function ifBelongsToParent(parentSection, section) {
     var belongs = true;
-    parentSection = parentSection &#x26;&#x26; parentSection.split(&#x27;.&#x27;);
-    section = section.split(&#x27;.&#x27;);
+    parentSection = parentSection &amp;&amp; parentSection.split('.');
+    section = section.split('.');
 
-    parentSection &#x26;&#x26; parentSection.forEach(function(val, n) {
+    parentSection &amp;&amp; parentSection.forEach(function(val, n) {
       if (val !== section[n]) {
         belongs = false;
       }
@@ -606,10 +599,10 @@
   function increaseSection(section, newSection, diff) {
     // remove final zeros
     var normalizedSection = getFinalZeros(section);
-    var normalizedSectionArray = normalizedSection.pure.split(&#x27;.&#x27;);
+    var normalizedSectionArray = normalizedSection.pure.split('.');
 
     var normalizedNewSection = getFinalZeros(newSection);
-    var normalizedNewSectionArray = normalizedNewSection.pure.split(&#x27;.&#x27;);
+    var normalizedNewSectionArray = normalizedNewSection.pure.split('.');
 
     // Shold increase the same register as there are in new section
     var registerIndex = normalizedNewSectionArray.length - 1;
@@ -617,7 +610,7 @@
       normalizedSectionArray[registerIndex] = parseInt(normalizedSectionArray[registerIndex]) + diff;
     }
 
-    return normalizedSectionArray.join(&#x27;.&#x27;) + normalizedSection.zeros;
+    return normalizedSectionArray.join('.') + normalizedSection.zeros;
   }
 
   function changeNumber(blocks, order, fileIndex) {
@@ -632,22 +625,22 @@
         return block;
       }
 
-      var parentSection = order.split(&#x27;.&#x27;);
+      var parentSection = order.split('.');
       parentSection.pop();
-      parentSection = parentSection.join(&#x27;.&#x27;);
+      parentSection = parentSection.join('.');
 
       if (!ifBelongsToParent(parentSection, currentNumber)) {
         return block;
       }
 
       /*if (isEqual(parentSection, currentNumber)) {
-        console.log(&#x27;isEqual&#x27;, parentSection, currentNumber);
+        console.log('isEqual', parentSection, currentNumber);
         return block;
       }*/
 
       var newVal = increaseSection(currentNumber, order, 1);
 
-      block.kss = block.kss.replace(sectionRegExp, &#x27;$1&#x27; + newVal);
+      block.kss = block.kss.replace(sectionRegExp, '$1' + newVal);
       allFiles[fileIndex].modified = true;
 
       return block;
@@ -660,7 +653,7 @@
 
     var contents = file.contents.toString(),
       syntax = path.extname(file.path).substring(1),
-      parser = parsers  ? parsers[syntax] : &#x27;undefined&#x27;,
+      parser = parsers  ? parsers[syntax] : 'undefined',
       blocks = kssSplitter.getBlocks(contents, syntax, parser);
 
     // check if a block is nearest sibling;
@@ -676,10 +669,10 @@ You may use `addSection` helper in order to make it easier adding a new section 
  reference numbers of the following sections. To create a helping task, write this:
 
 ```js
-gulp.task(&#x22;styleguide:addsection&#x22;, function() {
-  return gulp.src(&#x27;path/to/components/**/*.less&#x27;)
+gulp.task("styleguide:addsection", function() {
+  return gulp.src('path/to/components/**/*.less')
     .pipe(styleguide.<span class="apidocCodeKeywordSpan">addSection</span>())
-    .pipe(gulp.dest(&#x27;path/to/components/&#x27;))
+    .pipe(gulp.dest('path/to/components/'))
 });
 ```
 
@@ -702,9 +695,9 @@ Use this task with the parameters:
   var throughOpts = {
     objectMode: true,
     allowHalfOpen: false
-  }, stylesBuffer = &#x27;&#x27;,
-    pseudoStylesBuffer = &#x27;&#x27;,
-    atRulesBuffer = &#x27;&#x27;;
+  }, stylesBuffer = '',
+    pseudoStylesBuffer = '',
+    atRulesBuffer = '';
 
   function bufferFileContents(file, enc, done) {
     var pseudoStylesPromise,
@@ -717,7 +710,7 @@ Use this task with the parameters:
 
     // Process only CSS files
     // For example gulp-ruby-sass generatsd sourcemaps to the stream that we do not want to include
-    if (path.extname(file.path) !== &#x27;.css&#x27;) {
+    if (path.extname(file.path) !== '.css') {
       done();
       return;
     }
@@ -748,22 +741,22 @@ Use this task with the parameters:
 
   return through(throughOpts, bufferFileContents, function(cb) {
     this.push(new File({
-      path: &#x27;styleguide.css&#x27;,
+      path: 'styleguide.css',
       contents: new Buffer(stylesBuffer)
     }));
 
     this.push(new File({
-      path: &#x27;styleguide_pseudo_styles.css&#x27;,
+      path: 'styleguide_pseudo_styles.css',
       contents: new Buffer(pseudoStylesBuffer)
     }));
 
     this.push(new File({
-      path: &#x27;styleguide_at_rules.css&#x27;,
+      path: 'styleguide_at_rules.css',
       contents: new Buffer(atRulesBuffer)
     }));
 
     cb();
-  }).on(&#x27;end&#x27;, function() {
+  }).on('end', function() {
     if (socketIsOpen()) {
       serverInstance[sgOptions.port].io.emitStylesChanged();
     }
@@ -772,8 +765,8 @@ Use this task with the parameters:
     <li>example usage<pre class="apidocCodePre">...
 });
 
-gulp.task(&#x27;styleguide:applystyles&#x27;, function() {
-return gulp.src(&#x27;main.scss&#x27;)
+gulp.task('styleguide:applystyles', function() {
+return gulp.src('main.scss')
   .pipe(sass({
     errLogToConsole: true
   }))
@@ -781,10 +774,10 @@ return gulp.src(&#x27;main.scss&#x27;)
   .pipe(gulp.dest(outputPath));
 });
 
-gulp.task(&#x27;watch&#x27;, [&#x27;styleguide&#x27;], function() {
+gulp.task('watch', ['styleguide'], function() {
 // Start watching changes and update styleguide whenever changes are detected
 // Styleguide automatically detects existing server instance
-gulp.watch([&#x27;*.scss&#x27;], [&#x27;styleguide&#x27;]);
+gulp.watch(['*.scss'], ['styleguide']);
 ...</pre></li>
     </ul>
 
@@ -818,13 +811,13 @@ gulp.watch([&#x27;*.scss&#x27;], [&#x27;styleguide&#x27;]);
       return;
     }
     if (file.isStream()) {
-      return console.error(&#x27;Styleguide does not support streams!&#x27;);
+      return console.error('Styleguide does not support streams!');
     }
 
     // Exclude empty files
-    if (file.contents.toString(&#x27;utf8&#x27;) !== &#x27;&#x27;) {
-      filesBuffer[file.path] = file.contents.toString(&#x27;utf8&#x27;);
-      var hash = crypto.createHash(&#x27;md5&#x27;).update(file.path).digest(&#x27;hex&#x27;);
+    if (file.contents.toString('utf8') !== '') {
+      filesBuffer[file.path] = file.contents.toString('utf8');
+      var hash = crypto.createHash('md5').update(file.path).digest('hex');
       fileHashes[file.path] = hash;
       fileHashes[hash] = file.path;
     }
@@ -848,7 +841,7 @@ gulp.watch([&#x27;*.scss&#x27;], [&#x27;styleguide&#x27;]);
         // Filter variable files
         // File paths are full absolute paths so we need to add wildcard prefix
         // Also empty wildcard should return all files
-        variableFiles = opt.styleVariables ? filterFiles(filesBuffer, &#x27;**/&#x27; + opt.styleVariables) : filesBuffer,
+        variableFiles = opt.styleVariables ? filterFiles(filesBuffer, '**/' + opt.styleVariables) : filesBuffer,
         // Parse variable decarations from files
         parseVariablesPromise = variableParser.parseVariableDeclarationsFromFiles(variableFiles, opt);
 
@@ -873,15 +866,15 @@ gulp.watch([&#x27;*.scss&#x27;], [&#x27;styleguide&#x27;]);
             }
             markdown.getStream(opt.overviewPath)
               .pipe(rename(function(path) {
-                path.basename = &#x27;overview&#x27;;
-                path.extname = &#x27;.html&#x27;;
+                path.basename = 'overview';
+                path.extname = '.html';
               }))
               .pipe(pushAllFiles())
-              .on(&#x27;finish&#x27;, resolve);
+              .on('finish', resolve);
           });
         }
 
-        options.enablePug &#x26;&#x26; generatePugMarkup(styleguide, options);
+        options.enablePug &amp;&amp; generatePugMarkup(styleguide, options);
 
         _.each(styleguideProcessors, function(processor) {
           processor(styleguide);
@@ -893,7 +886,7 @@ gulp.watch([&#x27;*.scss&#x27;], [&#x27;styleguide&#x27;]);
 
         // Create JSON containing KSS data
         _this.push(new File({
-          path: &#x27;styleguide.json&#x27;,
+          path: 'styleguide.json',
           contents: new Buffer(JSON.stringify(styleguide))
         }));
 
@@ -904,33 +897,33 @@ gulp.watch([&#x27;*.scss&#x27;], [&#x27;styleguide&#x27;]);
           indexHtmlProcessed;
 
         overviewProcessed = processOverviewMarkdown(opt);
-        var cssSrc = [distPath + &#x27;/css/styleguide-app.css&#x27;, distPath + &#x27;/css/styleguide_helper_elements.css&#x27;];
+        var cssSrc = [distPath + '/css/styleguide-app.css', distPath + '/css/styleguide_helper_elements.css'];
 
         // Copy all files (except index.html) from dist from to output stream
         filesCopied = Q.Promise(function(resolve) {
-          //gulp.src([distPath + &#x27;/**&#x27;, &#x27;!&#x27; + distPath + &#x27;/index.html&#x27;, + &#x27;!&#x27; + distPath + &#x27;**/*.css&#x27;])
-          var copySrc = [distPath + &#x27;/**&#x27;, &#x27;!&#x27; + distPath + &#x27;/index.html&#x27;];
+          //gulp.src([distPath + '/**', '!' + distPath + '/index.html', + '!' + distPath + '**/*.css'])
+          var copySrc = [distPath + '/**', '!' + distPath + '/index.html'];
 
           copySrc = copySrc.concat(cssSrc.map(function(item){
-            return &#x27;!&#x27; + item;
+            return '!' + item;
           }));
 
           gulp.src(copySrc)
             .pipe(pushAllFiles())
-            .on(&#x27;finish&#x27;, resolve); ...</pre></li>
+            .on('finish', resolve); ...</pre></li>
     <li>example usage<pre class="apidocCodePre">...
-var gulp = require(&#x27;gulp&#x27;);
-var styleguide = require(&#x27;sc5-styleguide&#x27;);
-var sass = require(&#x27;gulp-sass&#x27;);
-var outputPath = &#x27;output&#x27;;
+var gulp = require('gulp');
+var styleguide = require('sc5-styleguide');
+var sass = require('gulp-sass');
+var outputPath = 'output';
 
-gulp.task(&#x27;styleguide:generate&#x27;, function() {
-  return gulp.src(&#x27;*.scss&#x27;)
+gulp.task('styleguide:generate', function() {
+  return gulp.src('*.scss')
     .pipe(styleguide.<span class="apidocCodeKeywordSpan">generate</span>({
-        title: &#x27;My Styleguide&#x27;,
+        title: 'My Styleguide',
         server: true,
         rootPath: outputPath,
-        overviewPath: &#x27;README.md&#x27;
+        overviewPath: 'README.md'
       }))
     .pipe(gulp.dest(outputPath));
 });
@@ -1007,16 +1000,16 @@ gulp.task(&#x27;styleguide:generate&#x27;, function() {
 
   sections.forEach(function(section) {
 
-    if (section[&#x27;sg-angular-directive&#x27;]) {
+    if (section['sg-angular-directive']) {
 
-      section[&#x27;sg-angular-directive&#x27;].files = section[&#x27;sg-angular-directive&#x27;].file;
-      if (!(section[&#x27;sg-angular-directive&#x27;].files instanceof Array)) {
-        section[&#x27;sg-angular-directive&#x27;].files = [
-          section[&#x27;sg-angular-directive&#x27;].files
+      section['sg-angular-directive'].files = section['sg-angular-directive'].file;
+      if (!(section['sg-angular-directive'].files instanceof Array)) {
+        section['sg-angular-directive'].files = [
+          section['sg-angular-directive'].files
         ];
       }
 
-      add(section[&#x27;sg-angular-directive&#x27;]);
+      add(section['sg-angular-directive']);
     }
   });
 
@@ -1085,11 +1078,11 @@ function pushAllFiles() {
   try {
     ast = css.parse(string, options);
   } catch (err) {
-    console.error(&#x27;An error occurred when extracting at-rules:&#x27;, err.toString());
+    console.error('An error occurred when extracting at-rules:', err.toString());
   }
 
   ast.stylesheet.rules = ast.stylesheet.rules.filter(function(rule) {
-    return rule.type === &#x27;keyframes&#x27; || rule.type === &#x27;font-face&#x27;;
+    return rule.type === 'keyframes' || rule.type === 'font-face';
   });
 
   return css.stringify(ast);
@@ -1129,24 +1122,24 @@ atRulesPromise = Q.Promise(function(resolve) {
     <ul>
     <li>description and source-code<pre class="apidocCodePre">function sanitizeOptions(opt) {
   return {
-    title: opt.title || &#x27;Styleguide Generator&#x27;,
+    title: opt.title || 'Styleguide Generator',
     sass: opt.sass || {},
     less: opt.less || {},
     css: opt.css || {},
     kssOpt: opt.kssOpt || {},
-    overviewPath: opt.overviewPath || path.join(__dirname, &#x27;/overview.md&#x27;),
-    extraHead: (typeof opt.extraHead === &#x27;object&#x27;) ? opt.extraHead.join(&#x27;\n&#x27;) : opt.extraHead,
-    beforeBody: (typeof opt.beforeBody === &#x27;object&#x27;) ? opt.beforeBody.join(&#x27;\n&#x27;) : opt.beforeBody,
-    afterBody: (typeof opt.afterBody === &#x27;object&#x27;) ? opt.afterBody.join(&#x27;\n&#x27;) : opt.afterBody,
-    afterSections: (typeof opt.afterSections === &#x27;object&#x27;) ? opt.afterSections.join(&#x27;\n&#x27;) : opt.afterSections,
+    overviewPath: opt.overviewPath || path.join(__dirname, '/overview.md'),
+    extraHead: (typeof opt.extraHead === 'object') ? opt.extraHead.join('\n') : opt.extraHead,
+    beforeBody: (typeof opt.beforeBody === 'object') ? opt.beforeBody.join('\n') : opt.beforeBody,
+    afterBody: (typeof opt.afterBody === 'object') ? opt.afterBody.join('\n') : opt.afterBody,
+    afterSections: (typeof opt.afterSections === 'object') ? opt.afterSections.join('\n') : opt.afterSections,
     additionalNgDependencies: opt.additionalNgDependencies || false,
     sideNav: opt.sideNav || false,
     showMarkupSection: opt.showMarkupSection || false,
     hideSubsectionsOnMainSection: opt.hideSubsectionsOnMainSection || false,
     disableEncapsulation: opt.disableEncapsulation || false,
-    disableHtml5Mode: opt.disableHtml5Mode || (typeof opt.disableHtml5Mode === &#x27;undefined&#x27; &#x26;&#x26; !opt.server) || false,
-    appRoot: opt.appRoot || &#x27;&#x27;,
-    commonClass: opt.commonClass || &#x27;&#x27;,
+    disableHtml5Mode: opt.disableHtml5Mode || (typeof opt.disableHtml5Mode === 'undefined' &amp;&amp; !opt.server) || false,
+    appRoot: opt.appRoot || '',
+    commonClass: opt.commonClass || '',
     styleVariables: opt.styleVariables || false,
     customColors: opt.customColors || false,
     favIcon: opt.favIcon || false,
@@ -1157,10 +1150,10 @@ atRulesPromise = Q.Promise(function(resolve) {
     rootPath: opt.rootPath,
     readOnly: opt.readOnly || false,
     parsers: opt.parsers || {
-      sass: &#x27;sass&#x27;,
-      scss: &#x27;scss&#x27;,
-      less: &#x27;less&#x27;,
-      postcss: &#x27;postcss&#x27;
+      sass: 'sass',
+      scss: 'scss',
+      less: 'less',
+      postcss: 'postcss'
     },
     filesConfig: opt.filesConfig,
     styleguideProcessors: opt.styleguideProcessors || {}
@@ -1200,36 +1193,36 @@ var opt = common.<span class="apidocCodeKeywordSpan">sanitizeOptions</span>(opti
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">function removeIgnoredBlocks(string) {
-  var lines = string.split(&#x27;\n&#x27;),
+  var lines = string.split('\n'),
     results = [],
     ignoreEnabled = false;
   lines.forEach(function(line) {
-    if (line.indexOf(&#x27;styleguide:ignore:start&#x27;) !== -1) {
-      results.push(&#x27;&#x27;);
+    if (line.indexOf('styleguide:ignore:start') !== -1) {
+      results.push('');
       ignoreEnabled = true;
-    } else if (line.indexOf(&#x27;styleguide:ignore:end&#x27;) !== -1) {
-      results.push(&#x27;&#x27;);
+    } else if (line.indexOf('styleguide:ignore:end') !== -1) {
+      results.push('');
       ignoreEnabled = false;
     } else if (ignoreEnabled) {
-      results.push(&#x27;&#x27;);
+      results.push('');
     } else {
       results.push(line);
     }
   });
-  return results.join(&#x27;\n&#x27;);
+  return results.join('\n');
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
-ignoreBlock = require(&#x27;./ignore-block&#x27;);
+ignoreBlock = require('./ignore-block');
 
 module.exports = {
 
   /* Split string source into array of code and comment blocks */
   pureSplitter: function(source, syntax, parser) {
-syntax = syntax || &#x27;scss&#x27;;
+syntax = syntax || 'scss';
 source = ignoreBlock.<span class="apidocCodeKeywordSpan">removeIgnoredBlocks</span>(source);
 
 var blocks;
-if (parser === &#x27;postcss&#x27;) {
+if (parser === 'postcss') {
   blocks = postcssParser.splitCodeAndCommentBlocks(source);
 } else {
   // Suits all the syntaxes
@@ -1254,20 +1247,20 @@ if (parser === &#x27;postcss&#x27;) {
     <li>description and source-code<pre class="apidocCodePre">get = function (source) {
 
   // Remove comment markup from comments
-  var comment = source.split(/\/\/[ ]?/).join(&#x27;&#x27;).split(&#x27;/*&#x27;).join(&#x27;&#x27;).split(&#x27;*/&#x27;).join(&#x27;&#x27;),
+  var comment = source.split(/\/\/[ ]?/).join('').split('/*').join('').split('*/').join(''),
     additionalKssParams = {},
     _this = this;
 
   comment = standardizeLinebreaks(comment);
   comment = trimLinebreaks(comment);
 
-  comment.split(&#x27;\n\n&#x27;).forEach(function(markUpBlock) {
+  comment.split('\n\n').forEach(function(markUpBlock) {
 
     var varName = markUpBlock.match(/([^:^\n]*):[\s\S]*\n/);
-    if (varName &#x26;&#x26; varName[1] !== undefined) {
+    if (varName &amp;&amp; varName[1] !== undefined) {
       varName = varName[1].trim();
     }
-    if (varName &#x26;&#x26; varName.substring(0, 3) === &#x27;sg-&#x27;) {
+    if (varName &amp;&amp; varName.substring(0, 3) === 'sg-') {
       additionalKssParams[varName] = _this.getValue(varName, markUpBlock);
     }
 
@@ -1282,14 +1275,14 @@ if (!serverInstance) {
 if (!serverInstance[options.port]) {
   var port = options.port;
   serverInstance[port] = sgServer(options);
-  serverInstance[port].app.set(&#x27;port&#x27;, port);
-  serverInstance[port].server.listen(serverInstance[port].app.<span class="apidocCodeKeywordSpan">get</span>(&#x27;port&#x27;),
+  serverInstance[port].app.set('port', port);
+  serverInstance[port].server.listen(serverInstance[port].app.<span class="apidocCodeKeywordSpan">get</span>('port'),
 function() {
-    console.log(&#x27;Express server listening on port &#x27; + serverInstance[port].server.address().port);
-  }).on(&#x27;error&#x27;, function(error) {
-    if (error.code === &#x27;EADDRINUSE&#x27;) {
-      console.error(&#x27;Port:&#x27; + port + &#x27; is already in use.&#x27;);
-      console.error(&#x27;Please provide port using --port &#x3c;port&#x3e;&#x27;);
+    console.log('Express server listening on port ' + serverInstance[port].server.address().port);
+  }).on('error', function(error) {
+    if (error.code === 'EADDRINUSE') {
+      console.error('Port:' + port + ' is already in use.');
+      console.error('Please provide port using --port &lt;port&gt;');
     }
   });
 ...</pre></li>
@@ -1306,7 +1299,7 @@ function() {
     <ul>
     <li>description and source-code<pre class="apidocCodePre">getValue = function (varName, source) {
 
-  var body = source.substring(source.indexOf(&#x27;\n&#x27;) + 1),
+  var body = source.substring(source.indexOf('\n') + 1),
     result;
 
   // Do not parse every variable
@@ -1316,12 +1309,12 @@ function() {
 
     result = {};
 
-    body.split(&#x27;\n&#x27;).forEach(function(line) {
+    body.split('\n').forEach(function(line) {
 
-      var keyVal = line.split(&#x27;:&#x27;).map(function(str) {
+      var keyVal = line.split(':').map(function(str) {
         str = str.trim();
-        if (str.indexOf(&#x27;,&#x27;) !== -1) {
-          str = str.split(&#x27;,&#x27;).map(function(s) {
+        if (str.indexOf(',') !== -1) {
+          str = str.split(',').map(function(s) {
             return s.trim();
           });
         }
@@ -1347,13 +1340,13 @@ function() {
   return result;
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
-  comment.split(&#x27;\n\n&#x27;).forEach(function(markUpBlock) {
+  comment.split('\n\n').forEach(function(markUpBlock) {
 
     var varName = markUpBlock.match(/([^:^\n]*):[\s\S]*\n/);
-    if (varName &#x26;&#x26; varName[1] !== undefined) {
+    if (varName &amp;&amp; varName[1] !== undefined) {
       varName = varName[1].trim();
     }
-    if (varName &#x26;&#x26; varName.substring(0, 3) === &#x27;sg-&#x27;) {
+    if (varName &amp;&amp; varName.substring(0, 3) === 'sg-') {
       additionalKssParams[varName] = _this.<span class="apidocCodeKeywordSpan">getValue</span>(varName, markUpBlock);
     }
 
@@ -1387,7 +1380,7 @@ function() {
     Object.keys(files).forEach(function(filePath) {
       var contents = files[filePath],
         syntax = path.extname(filePath).substring(1),
-        parser = parsers  ? parsers[syntax] : &#x27;undefined&#x27;;
+        parser = parsers  ? parsers[syntax] : 'undefined';
       filePromises.push(processFile(contents, filePath, syntax, options, parser));
     });
     // All files are processed
@@ -1395,7 +1388,7 @@ function() {
       // Combine sections from every file to a single array
       results.map(function(result) {
         var fileSections = result.valueOf();
-        if (fileSections &#x26;&#x26; fileSections.length &#x3e; 0) {
+        if (fileSections &amp;&amp; fileSections.length &gt; 0) {
           sections = sections.concat(fileSections);
         }
       });
@@ -1423,7 +1416,7 @@ return through(throughOpts, bufferFileContents, function(callback) {
       // Filter variable files
       // File paths are full absolute paths so we need to add wildcard prefix
       // Also empty wildcard should return all files
-      variableFiles = opt.styleVariables ? filterFiles(filesBuffer, &#x27;**/&#x27; + opt.styleVariables) : filesBuffer,
+      variableFiles = opt.styleVariables ? filterFiles(filesBuffer, '**/' + opt.styleVariables) : filesBuffer,
       // Parse variable decarations from files
       parseVariablesPromise = variableParser.parseVariableDeclarationsFromFiles(variableFiles, opt);
 ...</pre></li>
@@ -1446,7 +1439,7 @@ return through(throughOpts, bufferFileContents, function(callback) {
     <li>description and source-code<pre class="apidocCodePre">getBlocks = function (source, syntax, parser) {
   var blocks = this.pureSplitter(source, syntax, parser),
     pair = {
-      kss: &#x27;&#x27;,
+      kss: '',
       code: []
     },
     firstBlock = true,
@@ -1454,12 +1447,12 @@ return through(throughOpts, bufferFileContents, function(callback) {
     isKssMarkupBlock = /Styleguide [0-9]+/;
 
   blocks.forEach(function(block) {
-    if (block.type === &#x27;comment&#x27;) {
+    if (block.type === 'comment') {
       // Check if KSS
       if (isKssMarkupBlock.test(block.content)) {
         // Save old pair
-        if (pair &#x26;&#x26; !firstBlock) {
-          pair.code = pair.code.join(&#x27;&#x27;);
+        if (pair &amp;&amp; !firstBlock) {
+          pair.code = pair.code.join('');
           pairs.push(pair);
         }
         // KSS starts a new block
@@ -1480,7 +1473,7 @@ return through(throughOpts, bufferFileContents, function(callback) {
   });
 
   // Push last pair
-  pair.code = pair.code.join(&#x27;&#x27;);
+  pair.code = pair.code.join('');
   pairs.push(pair);
 
   return pairs;
@@ -1514,11 +1507,11 @@ blocks.forEach(function(block) {
     </h2>
     <ul>
     <li>description and source-code<pre class="apidocCodePre">pureSplitter = function (source, syntax, parser) {
-  syntax = syntax || &#x27;scss&#x27;;
+  syntax = syntax || 'scss';
   source = ignoreBlock.removeIgnoredBlocks(source);
 
   var blocks;
-  if (parser === &#x27;postcss&#x27;) {
+  if (parser === 'postcss') {
     blocks = postcssParser.splitCodeAndCommentBlocks(source);
   } else {
     // Suits all the syntaxes
@@ -1536,7 +1529,7 @@ blocks.forEach(function(block) {
 getBlocks: function(source, syntax, parser) {
   var blocks = this.<span class="apidocCodeKeywordSpan">pureSplitter</span>(source, syntax, parser),
     pair = {
-      kss: &#x27;&#x27;,
+      kss: '',
       code: []
     },
     firstBlock = true,
@@ -1573,11 +1566,11 @@ function processOverviewMarkdown(opt) {
     }
     markdown.<span class="apidocCodeKeywordSpan">getStream</span>(opt.overviewPath)
       .pipe(rename(function(path) {
-        path.basename = &#x27;overview&#x27;;
-        path.extname = &#x27;.html&#x27;;
+        path.basename = 'overview';
+        path.extname = '.html';
       }))
       .pipe(pushAllFiles())
-      .on(&#x27;finish&#x27;, resolve);
+      .on('finish', resolve);
   });
 ...</pre></li>
     </ul>
@@ -1594,34 +1587,34 @@ function processOverviewMarkdown(opt) {
     <li>description and source-code<pre class="apidocCodePre">processHtml = function (html) {
   var $ = cheerio.load(html);
   // Switch fence code block with angular-highlightjs friendly div
-  $(&#x27;pre &#x3e; code&#x27;).each(function() {
+  $('pre &gt; code').each(function() {
     var code = $(this);
-    var lang = &#x27;&#x27;;
-    // Capture any &#x22;language-&#x22; className values
-    if (code.attr(&#x27;class&#x27;)) {
-      lang = code.attr(&#x27;class&#x27;).split(/\s+/).reduce(function(pv, cv) {
-        return pv + (cv.startsWith(&#x27;language-&#x27;) ? cv.substr(9 - cv.length) + &#x27; &#x27; : &#x27;&#x27;);
-      }, &#x27;&#x27;).trim();
+    var lang = '';
+    // Capture any "language-" className values
+    if (code.attr('class')) {
+      lang = code.attr('class').split(/\s+/).reduce(function(pv, cv) {
+        return pv + (cv.startsWith('language-') ? cv.substr(9 - cv.length) + ' ' : '');
+      }, '').trim();
     }
     // Replace parent PRE element with hljs attributed DIV
     code.parent().replaceWith(
-        &#x27;&#x3c;div hljs&#x27; + (lang.length ? &#x27; hljs-language=&#x22;&#x27; + lang + &#x27;&#x22;&#x27; : &#x27;&#x27;) + &#x27;&#x3e;&#x27; +
+        '&lt;div hljs' + (lang.length ? ' hljs-language="' + lang + '"' : '') + '&gt;' +
         code.html() +
-        &#x27;&#x3c;/div&#x3e;&#x27;
+        '&lt;/div&gt;'
     );
   });
-  $(&#x27;p, a, li, pre, h1, h2, h3, h4, h5, h6, table, thead, tbody, tr, th, td&#x27;).not(&#x27;[sg-no-style]&#x27;).addClass(&#x27;sg&#x27;);
+  $('p, a, li, pre, h1, h2, h3, h4, h5, h6, table, thead, tbody, tr, th, td').not('[sg-no-style]').addClass('sg');
   excludeLinks.forEach(function(link) {
-    $(&#x27;a[href^=&#x22;&#x27; + link + &#x27;&#x22;]&#x27;).remove();
+    $('a[href^="' + link + '"]').remove();
   });
-  $(&#x27;h1, h2, h3, h4, h5, h6&#x27;).each(function() {
-    $(this).attr(&#x27;name&#x27;, dasherize($(this).text()));
+  $('h1, h2, h3, h4, h5, h6').each(function() {
+    $(this).attr('name', dasherize($(this).text()));
   });
   // Add scroll directive to anchor links
-  $(&#x27;a&#x27;).each(function() {
-    var target = this.attribs &#x26;&#x26; this.attribs.href;
-    if (target &#x26;&#x26; target.substring(0, 1) === &#x27;#&#x27;) {
-      $(this).attr(&#x27;du-smooth-scroll&#x27;, &#x27;yes&#x27;);
+  $('a').each(function() {
+    var target = this.attribs &amp;&amp; this.attribs.href;
+    if (target &amp;&amp; target.substring(0, 1) === '#') {
+      $(this).attr('du-smooth-scroll', 'yes');
     }
   });
   return $.html();
@@ -1632,7 +1625,7 @@ function processOverviewMarkdown(opt) {
 
 render: function(string) {
   if (!string) {
-    return &#x27;&#x27;;
+    return '';
   }
   return this.<span class="apidocCodeKeywordSpan">processHtml</span>(md.render(string));
 },
@@ -1640,7 +1633,7 @@ render: function(string) {
 processHtml: function(html) {
   var $ = cheerio.load(html);
   // Switch fence code block with angular-highlightjs friendly div
-  $(&#x27;pre &#x3e; code&#x27;).each(function() {
+  $('pre &gt; code').each(function() {
     var code = $(this);
 ...</pre></li>
     </ul>
@@ -1675,7 +1668,7 @@ processHtml: function(html) {
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
 function dasherize(str) {
-return str.replace(/\s/ig, &#x27;-&#x27;).toLowerCase();
+return str.replace(/\s/ig, '-').toLowerCase();
 }
 
 module.exports = {
@@ -1703,16 +1696,16 @@ processStream: function() {
     <ul>
     <li>description and source-code<pre class="apidocCodePre">render = function (string) {
   if (!string) {
-    return &#x27;&#x27;;
+    return '';
   }
   return this.processHtml(md.render(string));
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
 
 pugstring = bemtoinclude + section.markup;
-md5 = crypto.createHash(&#x27;md5&#x27;).update(pugstring).digest(&#x27;hex&#x27;);
+md5 = crypto.createHash('md5').update(pugstring).digest('hex');
 
-if (pugCache.getItem(cacheKey) &#x26;&#x26; pugCache.getItem(cacheKey).key === md5) {
+if (pugCache.getItem(cacheKey) &amp;&amp; pugCache.getItem(cacheKey).key === md5) {
   section.markup = pugCache.getItem(cacheKey).value;
 } else {
   section.markup = pug.<span class="apidocCodeKeywordSpan">render</span>(pugstring, pugOptions);
@@ -1745,19 +1738,19 @@ if (section.modifiers) {
 
   function pseudoMatcher() {
     var pseudoSelectors = [
-      &#x27;hover&#x27;, &#x27;enabled&#x27;, &#x27;disabled&#x27;, &#x27;active&#x27;, &#x27;visited&#x27;,
-      &#x27;focus&#x27;, &#x27;target&#x27;, &#x27;checked&#x27;, &#x27;empty&#x27;, &#x27;first-of-type&#x27;, &#x27;last-of-type&#x27;,
-      &#x27;first-child&#x27;, &#x27;last-child&#x27;
+      'hover', 'enabled', 'disabled', 'active', 'visited',
+      'focus', 'target', 'checked', 'empty', 'first-of-type', 'last-of-type',
+      'first-child', 'last-child'
     ],
-      notInsideParentheses = &#x27;(?![^(]*\\))&#x27;;
+      notInsideParentheses = '(?![^(]*\\))';
     // Match all pseudo selectors that are not inside parentheses
-    return new RegExp(&#x27;(\\:&#x27; + (pseudoSelectors.join(notInsideParentheses + &#x27;|\\:&#x27;)) + notInsideParentheses + &#x27;)&#x27;, &#x27;g&#x27;);
+    return new RegExp('(\\:' + (pseudoSelectors.join(notInsideParentheses + '|\\:')) + notInsideParentheses + ')', 'g');
   }
 
   try {
     ast = css.parse(cssString, options);
   } catch (err) {
-    console.error(&#x27;An error occurred when creating pseudo styles:&#x27;, err.toString());
+    console.error('An error occurred when creating pseudo styles:', err.toString());
   }
 
   _.each(ast.stylesheet.rules, function(rule) {
@@ -1766,10 +1759,10 @@ if (section.modifiers) {
       return pseudoMatcher().test(selector);
     });
     // Replace selector pseudo class with actual class
-    if (rule.selectors.length &#x3e; 0) {
+    if (rule.selectors.length &gt; 0) {
       rule.selectors = _.map(rule.selectors, function(selector) {
         return selector.replace(pseudoMatcher(), function(matched) {
-          return matched.replace(/\:/g, &#x27;.pseudo-class-&#x27;);
+          return matched.replace(/\:/g, '.pseudo-class-');
         });
       });
       pseudoRules.push(rule);
@@ -1824,11 +1817,11 @@ atRulesPromise = Q.Promise(function(resolve) {
 <span class="apidocCodeCommentSpan">    /* Check if the parent section was already mentioned
      * in the tree */
 </span>    /* Put cursor to the root for the root elements */
-    if (ref.indexOf(&#x27;.&#x27;) === -1 || ref.indexOf(&#x27;.0&#x27;, ref.length - 2) !== -1) {
+    if (ref.indexOf('.') === -1 || ref.indexOf('.0', ref.length - 2) !== -1) {
       cursor = nested.sections;
     }
-    while (ref.indexOf(&#x27;.&#x27;) !== -1) {
-      ref = ref.substring(0, ref.lastIndexOf(&#x27;.&#x27;));
+    while (ref.indexOf('.') !== -1) {
+      ref = ref.substring(0, ref.lastIndexOf('.'));
 
       /* Parent section */
       par = prevSections[prevSections.indexOf(ref)];
@@ -1869,8 +1862,8 @@ atRulesPromise = Q.Promise(function(resolve) {
   // TODO: Not to calculate twice
   var index = buildReferenceDictionary(sections);
   return sections.map(function(section) {
-    findeAndReplace(section, &#x27;markup&#x27;, index);
-    findeAndReplace(section, &#x27;sg-wrapper&#x27;, index);
+    findeAndReplace(section, 'markup', index);
+    findeAndReplace(section, 'sg-wrapper', index);
     return section;
   });
 }</pre></li>
@@ -1886,9 +1879,9 @@ json.sections = sectionReferences.<span class="apidocCodeKeywordSpan">replace</s
 }
 
 function copyUsedOptionsToJsonConfig(opt, json) {
-var used = [&#x27;appRoot&#x27;, &#x27;extraHead&#x27;, &#x27;beforeBody&#x27;, &#x27;afterBody&#x27;, &#x27;commonClass&#x27;, &#
-x27;title&#x27;, &#x27;disableEncapsulation&#x27;, &#x27;disableHtml5Mode&#x27;, &#x27;readOnly&#x27;, &#x27;sideNav&#x27;, &#x27
-;afterSections&#x27;, &#x27;showMarkupSection&#x27;, &#x27;hideSubsectionsOnMainSection&#x27;, &#x27;additionalNgDependencies&#x27
+var used = ['appRoot', 'extraHead', 'beforeBody', 'afterBody', 'commonClass', &amp;#
+x27;title', 'disableEncapsulation', 'disableHtml5Mode', 'readOnly', 'sideNav', '
+;afterSections', 'showMarkupSection', 'hideSubsectionsOnMainSection', 'additionalNgDependencies'
 ;];
 json.config = {};
 used.forEach(function(prop) {
@@ -1923,19 +1916,19 @@ used.forEach(function(prop) {
       order: args.order || args.o
     };
 
-  var parsers = options &#x26;&#x26; options.parsers || &#x27;undefined&#x27;;
+  var parsers = options &amp;&amp; options.parsers || 'undefined';
 
   // Validate params
 
   if (!params.name) {
     gutil.beep();
-    gutil.log(gutil.colors.red(&#x27;Define name with --name=my-name&#x27;));
+    gutil.log(gutil.colors.red('Define name with --name=my-name'));
     return;
   }
 
   if (!params.order) {
     gutil.beep();
-    gutil.log(gutil.colors.red(&#x27;Define name with --order=1.2.3&#x27;));
+    gutil.log(gutil.colors.red('Define name with --order=1.2.3'));
     return;
   }
 
@@ -1948,17 +1941,17 @@ used.forEach(function(prop) {
   var nearestSibling = null;
 
   function isLess(left, right) {
-    left = left.split(&#x27;.&#x27;);
-    right = right.split(&#x27;.&#x27;);
+    left = left.split('.');
+    right = right.split('.');
 
     var l = false;
 
-    for (var i = 0; i &#x3c; Math.max(left.length, right.length); i++) {
-      if (parseInt(left[i]) &#x3c; parseInt(right[i])) {
+    for (var i = 0; i &lt; Math.max(left.length, right.length); i++) {
+      if (parseInt(left[i]) &lt; parseInt(right[i])) {
         l = true;
         break;
       }
-      if (parseInt(left[i]) &#x3e; parseInt(right[i])) {
+      if (parseInt(left[i]) &gt; parseInt(right[i])) {
         l = false;
         break;
       }
@@ -1997,10 +1990,10 @@ used.forEach(function(prop) {
 </span>
   function ifBelongsToParent(parentSection, section) {
     var belongs = true;
-    parentSection = parentSection &#x26;&#x26; parentSection.split(&#x27;.&#x27;);
-    section = section.split(&#x27;.&#x27;);
+    parentSection = parentSection &amp;&amp; parentSection.split('.');
+    section = section.split('.');
 
-    parentSection &#x26;&#x26; parentSection.forEach(function(val, n) {
+    parentSection &amp;&amp; parentSection.forEach(function(val, n) {
       if (val !== section[n]) {
         belongs = false;
       }
@@ -2011,10 +2004,10 @@ used.forEach(function(prop) {
   function increaseSection(section, newSection, diff) {
     // remove final zeros
     var normalizedSection = getFinalZeros(section);
-    var normalizedSectionArray = normalizedSection.pure.split(&#x27;.&#x27;);
+    var normalizedSectionArray = normalizedSection.pure.split('.');
 
     var normalizedNewSection = getFinalZeros(newSection);
-    var normalizedNewSectionArray = normalizedNewSection.pure.split(&#x27;.&#x27;);
+    var normalizedNewSectionArray = normalizedNewSection.pure.split('.');
 
     // Shold increase the same register as there are in new section
     var registerIndex = normalizedNewSectionArray.length - 1;
@@ -2022,7 +2015,7 @@ used.forEach(function(prop) {
       normalizedSectionArray[registerIndex] = parseInt(normalizedSectionArray[registerIndex]) + diff;
     }
 
-    return normalizedSectionArray.join(&#x27;.&#x27;) + normalizedSection.zeros;
+    return normalizedSectionArray.join('.') + normalizedSection.zeros;
   }
 
   function changeNumber(blocks, order, fileIndex) {
@@ -2037,22 +2030,22 @@ used.forEach(function(prop) {
         return block;
       }
 
-      var parentSection = order.split(&#x27;.&#x27;);
+      var parentSection = order.split('.');
       parentSection.pop();
-      parentSection = parentSection.join(&#x27;.&#x27;);
+      parentSection = parentSection.join('.');
 
       if (!ifBelongsToParent(parentSection, currentNumber)) {
         return block;
       }
 
       /*if (isEqual(parentSection, currentNumber)) {
-        console.log(&#x27;isEqual&#x27;, parentSection, currentNumber);
+        console.log('isEqual', parentSection, currentNumber);
         return block;
       }*/
 
       var newVal = increaseSection(currentNumber, order, 1);
 
-      block.kss = block.kss.replace(sectionRegExp, &#x27;$1&#x27; + newVal);
+      block.kss = block.kss.replace(sectionRegExp, '$1' + newVal);
       allFiles[fileIndex].modified = true;
 
       return block;
@@ -2065,7 +2058,7 @@ used.forEach(function(prop) {
 
     var contents = file.contents.toString(),
       syntax = path.extname(file.path).substring(1),
-      parser = parsers  ? parsers[syntax] : &#x27;undefined&#x27;,
+      parser = parsers  ? parsers[syntax] : 'undefined',
       blocks = kssSplitter.getBlocks(contents, syntax, parser);
 
     // check if a block is nearest sibling;
@@ -2081,10 +2074,10 @@ You may use `addSection` helper in order to make it easier adding a new section 
  reference numbers of the following sections. To create a helping task, write this:
 
 ```js
-gulp.task(&#x22;styleguide:addsection&#x22;, function() {
-  return gulp.src(&#x27;path/to/components/**/*.less&#x27;)
+gulp.task("styleguide:addsection", function() {
+  return gulp.src('path/to/components/**/*.less')
     .pipe(styleguide.<span class="apidocCodeKeywordSpan">addSection</span>())
-    .pipe(gulp.dest(&#x27;path/to/components/&#x27;))
+    .pipe(gulp.dest('path/to/components/'))
 });
 ```
 
@@ -2107,9 +2100,9 @@ Use this task with the parameters:
   var throughOpts = {
     objectMode: true,
     allowHalfOpen: false
-  }, stylesBuffer = &#x27;&#x27;,
-    pseudoStylesBuffer = &#x27;&#x27;,
-    atRulesBuffer = &#x27;&#x27;;
+  }, stylesBuffer = '',
+    pseudoStylesBuffer = '',
+    atRulesBuffer = '';
 
   function bufferFileContents(file, enc, done) {
     var pseudoStylesPromise,
@@ -2122,7 +2115,7 @@ Use this task with the parameters:
 
     // Process only CSS files
     // For example gulp-ruby-sass generatsd sourcemaps to the stream that we do not want to include
-    if (path.extname(file.path) !== &#x27;.css&#x27;) {
+    if (path.extname(file.path) !== '.css') {
       done();
       return;
     }
@@ -2153,22 +2146,22 @@ Use this task with the parameters:
 
   return through(throughOpts, bufferFileContents, function(cb) {
     this.push(new File({
-      path: &#x27;styleguide.css&#x27;,
+      path: 'styleguide.css',
       contents: new Buffer(stylesBuffer)
     }));
 
     this.push(new File({
-      path: &#x27;styleguide_pseudo_styles.css&#x27;,
+      path: 'styleguide_pseudo_styles.css',
       contents: new Buffer(pseudoStylesBuffer)
     }));
 
     this.push(new File({
-      path: &#x27;styleguide_at_rules.css&#x27;,
+      path: 'styleguide_at_rules.css',
       contents: new Buffer(atRulesBuffer)
     }));
 
     cb();
-  }).on(&#x27;end&#x27;, function() {
+  }).on('end', function() {
     if (socketIsOpen()) {
       serverInstance[sgOptions.port].io.emitStylesChanged();
     }
@@ -2177,8 +2170,8 @@ Use this task with the parameters:
     <li>example usage<pre class="apidocCodePre">...
 });
 
-gulp.task(&#x27;styleguide:applystyles&#x27;, function() {
-return gulp.src(&#x27;main.scss&#x27;)
+gulp.task('styleguide:applystyles', function() {
+return gulp.src('main.scss')
   .pipe(sass({
     errLogToConsole: true
   }))
@@ -2186,10 +2179,10 @@ return gulp.src(&#x27;main.scss&#x27;)
   .pipe(gulp.dest(outputPath));
 });
 
-gulp.task(&#x27;watch&#x27;, [&#x27;styleguide&#x27;], function() {
+gulp.task('watch', ['styleguide'], function() {
 // Start watching changes and update styleguide whenever changes are detected
 // Styleguide automatically detects existing server instance
-gulp.watch([&#x27;*.scss&#x27;], [&#x27;styleguide&#x27;]);
+gulp.watch(['*.scss'], ['styleguide']);
 ...</pre></li>
     </ul>
 
@@ -2223,13 +2216,13 @@ gulp.watch([&#x27;*.scss&#x27;], [&#x27;styleguide&#x27;]);
       return;
     }
     if (file.isStream()) {
-      return console.error(&#x27;Styleguide does not support streams!&#x27;);
+      return console.error('Styleguide does not support streams!');
     }
 
     // Exclude empty files
-    if (file.contents.toString(&#x27;utf8&#x27;) !== &#x27;&#x27;) {
-      filesBuffer[file.path] = file.contents.toString(&#x27;utf8&#x27;);
-      var hash = crypto.createHash(&#x27;md5&#x27;).update(file.path).digest(&#x27;hex&#x27;);
+    if (file.contents.toString('utf8') !== '') {
+      filesBuffer[file.path] = file.contents.toString('utf8');
+      var hash = crypto.createHash('md5').update(file.path).digest('hex');
       fileHashes[file.path] = hash;
       fileHashes[hash] = file.path;
     }
@@ -2253,7 +2246,7 @@ gulp.watch([&#x27;*.scss&#x27;], [&#x27;styleguide&#x27;]);
         // Filter variable files
         // File paths are full absolute paths so we need to add wildcard prefix
         // Also empty wildcard should return all files
-        variableFiles = opt.styleVariables ? filterFiles(filesBuffer, &#x27;**/&#x27; + opt.styleVariables) : filesBuffer,
+        variableFiles = opt.styleVariables ? filterFiles(filesBuffer, '**/' + opt.styleVariables) : filesBuffer,
         // Parse variable decarations from files
         parseVariablesPromise = variableParser.parseVariableDeclarationsFromFiles(variableFiles, opt);
 
@@ -2278,15 +2271,15 @@ gulp.watch([&#x27;*.scss&#x27;], [&#x27;styleguide&#x27;]);
             }
             markdown.getStream(opt.overviewPath)
               .pipe(rename(function(path) {
-                path.basename = &#x27;overview&#x27;;
-                path.extname = &#x27;.html&#x27;;
+                path.basename = 'overview';
+                path.extname = '.html';
               }))
               .pipe(pushAllFiles())
-              .on(&#x27;finish&#x27;, resolve);
+              .on('finish', resolve);
           });
         }
 
-        options.enablePug &#x26;&#x26; generatePugMarkup(styleguide, options);
+        options.enablePug &amp;&amp; generatePugMarkup(styleguide, options);
 
         _.each(styleguideProcessors, function(processor) {
           processor(styleguide);
@@ -2298,7 +2291,7 @@ gulp.watch([&#x27;*.scss&#x27;], [&#x27;styleguide&#x27;]);
 
         // Create JSON containing KSS data
         _this.push(new File({
-          path: &#x27;styleguide.json&#x27;,
+          path: 'styleguide.json',
           contents: new Buffer(JSON.stringify(styleguide))
         }));
 
@@ -2309,33 +2302,33 @@ gulp.watch([&#x27;*.scss&#x27;], [&#x27;styleguide&#x27;]);
           indexHtmlProcessed;
 
         overviewProcessed = processOverviewMarkdown(opt);
-        var cssSrc = [distPath + &#x27;/css/styleguide-app.css&#x27;, distPath + &#x27;/css/styleguide_helper_elements.css&#x27;];
+        var cssSrc = [distPath + '/css/styleguide-app.css', distPath + '/css/styleguide_helper_elements.css'];
 
         // Copy all files (except index.html) from dist from to output stream
         filesCopied = Q.Promise(function(resolve) {
-          //gulp.src([distPath + &#x27;/**&#x27;, &#x27;!&#x27; + distPath + &#x27;/index.html&#x27;, + &#x27;!&#x27; + distPath + &#x27;**/*.css&#x27;])
-          var copySrc = [distPath + &#x27;/**&#x27;, &#x27;!&#x27; + distPath + &#x27;/index.html&#x27;];
+          //gulp.src([distPath + '/**', '!' + distPath + '/index.html', + '!' + distPath + '**/*.css'])
+          var copySrc = [distPath + '/**', '!' + distPath + '/index.html'];
 
           copySrc = copySrc.concat(cssSrc.map(function(item){
-            return &#x27;!&#x27; + item;
+            return '!' + item;
           }));
 
           gulp.src(copySrc)
             .pipe(pushAllFiles())
-            .on(&#x27;finish&#x27;, resolve); ...</pre></li>
+            .on('finish', resolve); ...</pre></li>
     <li>example usage<pre class="apidocCodePre">...
-var gulp = require(&#x27;gulp&#x27;);
-var styleguide = require(&#x27;sc5-styleguide&#x27;);
-var sass = require(&#x27;gulp-sass&#x27;);
-var outputPath = &#x27;output&#x27;;
+var gulp = require('gulp');
+var styleguide = require('sc5-styleguide');
+var sass = require('gulp-sass');
+var outputPath = 'output';
 
-gulp.task(&#x27;styleguide:generate&#x27;, function() {
-  return gulp.src(&#x27;*.scss&#x27;)
+gulp.task('styleguide:generate', function() {
+  return gulp.src('*.scss')
     .pipe(styleguide.<span class="apidocCodeKeywordSpan">generate</span>({
-        title: &#x27;My Styleguide&#x27;,
+        title: 'My Styleguide',
         server: true,
         rootPath: outputPath,
-        overviewPath: &#x27;README.md&#x27;
+        overviewPath: 'README.md'
       }))
     .pipe(gulp.dest(outputPath));
 });
@@ -2386,7 +2379,7 @@ gulp.task(&#x27;styleguide:generate&#x27;, function() {
       section.variables = variableParser.findVariables(section.css, section.syntax, opt);
     }
   } catch (e) {
-    console.error(&#x27;Could not parse used variables from section&#x27;, section.reference + &#x27;:&#x27;);
+    console.error('Could not parse used variables from section', section.reference + ':');
     console.error(e.toString());
   }
 
@@ -2430,7 +2423,7 @@ try {
 );
   }
 } catch (e) {
-  console.error(&#x27;Could not parse used variables from section&#x27;, section.reference + &#x27;:&#x27;);
+  console.error('Could not parse used variables from section', section.reference + ':');
   console.error(e.toString());
 }
 
@@ -2467,7 +2460,7 @@ function checkSyntax(file) {
 }
 
 function writeFileContents(file) {
-  fs.writeFileSync(file.path, file.contents, { encoding: &#x27;utf8&#x27; });
+  fs.writeFileSync(file.path, file.contents, { encoding: 'utf8' });
 }
 
 function emitProgressStart() {
@@ -2499,7 +2492,7 @@ function emitProgressStart() {
   });
 
   return Q.all(filePromises).then(function(results) {
-    return _.chain(results).flatten().sortBy(&#x27;file&#x27;).value();
+    return _.chain(results).flatten().sortBy('file').value();
   });
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
@@ -2508,7 +2501,7 @@ parseKSSPromise = kssParser.parseKssSections(filesBuffer, opt.kssOpt, opt.parser
 // Filter variable files
 // File paths are full absolute paths so we need to add wildcard prefix
 // Also empty wildcard should return all files
-variableFiles = opt.styleVariables ? filterFiles(filesBuffer, &#x27;**/&#x27; + opt.styleVariables) : filesBuffer,
+variableFiles = opt.styleVariables ? filterFiles(filesBuffer, '**/' + opt.styleVariables) : filesBuffer,
 // Parse variable decarations from files
 parseVariablesPromise = variableParser.<span class="apidocCodeKeywordSpan">parseVariableDeclarationsFromFiles</span>(variableFiles
 , opt);
@@ -2542,7 +2535,7 @@ opt.filesConfig = angularFiles.add(opt.filesConfig, sections);
 }
 
 function readFileContents(file) {
-  file.contents = fs.readFileSync(file.path, { encoding: &#x27;utf8&#x27; });
+  file.contents = fs.readFileSync(file.path, { encoding: 'utf8' });
 }
 
 function updateVariableValues(file) {
@@ -2575,14 +2568,14 @@ function writeFileContents(file) {
     <li>description and source-code<pre class="apidocCodePre">function generateSectionWrapperMarkup(sections) {
 <span class="apidocCodeCommentSpan">  /* Calculate own wrapper */
 </span>  var wrapper,
-      wrapperKeyword = &#x27;&#x3c;sg-wrapper-content/&#x3e;&#x27;,
+      wrapperKeyword = '&lt;sg-wrapper-content/&gt;',
       wrapperRegExp,
   // TODO: do not calculate twice
       index = buildReferenceDictionary(sections);
 
   return sections.map(function(section) {
-    wrapper = section[&#x27;sg-wrapper&#x27;] || wrapperKeyword;
-    wrapperRegExp = new RegExp(wrapperKeyword, &#x27;g&#x27;);
+    wrapper = section['sg-wrapper'] || wrapperKeyword;
+    wrapperRegExp = new RegExp(wrapperKeyword, 'g');
     /* Wrap a wrapper with a parent wrapper */
     if (section.parentReference) {
       var parentWrapper = index[section.parentReference].wrapper;
@@ -2636,3 +2629,4 @@ function copyUsedOptionsToJsonConfig(opt, json) {
     ]
 </div>
 </div>
+</body></html>
